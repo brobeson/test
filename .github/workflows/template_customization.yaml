@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       description:
-        description: 'The short description of your new project.'
+        description: "The short description of your new project."
         required: true
         type: string
 jobs:
@@ -15,4 +15,28 @@ jobs:
       contents: write
       issues: write
     steps:
-      - run: echo "${{inputs.description}}"
+      - name: Set up a test environment
+        if: ${{github.event.repository.name == 'CppStarter'}}
+        run: |
+          echo "::notice ::Running in a test environment."
+          echo "PROJECT_NAME=TestProject" >> ${GITHUB_ENV}
+          echo "OWNER=TestOwner" >> ${GITHUB_ENV}
+          echo "DESCRIPTION=${{inputs.description}}" >> ${GITHUB_ENV}
+      - name: Set up a production environment
+        if: ${{github.event.repository.name != 'CppStarter'}}
+        run: |
+          echo "PROJECT_NAME=${{github.event.repository.name}}" >> ${GITHUB_ENV}
+          echo "OWNER=${{github.repository_owner}}" >> ${GITHUB_ENV}
+          echo "DESCRIPTION=${{inputs.description}}" >> ${GITHUB_ENV}
+      - name: Clone the New Repository
+        uses: actions/checkout@v4
+      - name: Run the customization script
+        env:
+          GH_TOKEN: ${{github.token}}
+        run: .github/workflows/customize.sh
+      - name: Commit and Push
+        uses: EndBug/add-and-commit@v9
+        with:
+          add: --all
+          message: "Customize the new project"
+          pathspec_error_handling: exitImmediately
