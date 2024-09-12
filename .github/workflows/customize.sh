@@ -19,7 +19,6 @@ sed --in-place \
   LICENSE ./**/*.md .github/**/*.yaml .vscode/*.json ./**/CMakeLists.txt
 
 # Update the CMake project(DESCRIPTION ...)
-DESCRIPTION=$(gh repo view --json description --jq .description)
 sed --in-place "s/DESCRIPTION .*/DESCRIPTION ${DESCRIPTION}/" CMakeLists.txt
 
 # That sed catches the static analysis workflow, but nothing should change in
@@ -34,3 +33,18 @@ gh api \
   --raw-field title='Next Release' \
   --raw-field state='open' \
   --raw-field description='Task planning for the next release'
+
+# Update the repo settings that we can from the GH CLI
+gh repo edit \
+  --add-topic cmake \
+  --add-topic cpp \
+  --allow-update-branch \
+  --default-branch main \
+  --delete-branch-on-merge \
+  --description "${DESCRIPTION}" \
+  --enable-auto-merge=false \
+  --enable-discussions=false \
+  --enable-merge-commit=false \
+  --enable-projects \
+  --enable-wiki=false \
+  --homepage "https://github.com/${OWNER}/${PROJECT_NAME}"
