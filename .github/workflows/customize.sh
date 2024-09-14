@@ -36,15 +36,4 @@ gh api \
 
 # Update the repo settings that we can from the GH CLI
 gh repo edit \
-  --add-topic cmake \
-  --add-topic cpp \
-  --allow-update-branch \
-  --default-branch main \
-  --delete-branch-on-merge \
-  --description "${DESCRIPTION}" \
-  --enable-auto-merge=false \
-  --enable-discussions=false \
-  --enable-merge-commit=false \
-  --enable-projects \
-  --enable-wiki=false \
-  --homepage "https://github.com/${OWNER}/${PROJECT_NAME}"
+  --add-topic cmake
