@@ -11,9 +11,7 @@ jobs:
   tidy:
     name: Customize
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      issues: write
+    permissions: write-all
     steps:
       - name: Set up a test environment
         if: ${{github.event.repository.name == 'CppStarter'}}
