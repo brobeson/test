@@ -34,9 +34,3 @@ jobs:
         env:
           GH_TOKEN: ${{github.token}}
         run: .github/workflows/customize.sh
-      - name: Commit and Push
-        uses: EndBug/add-and-commit@v9
-        with:
-          add: --all
-          message: "Customize the new project"
-          pathspec_error_handling: exitImmediately
